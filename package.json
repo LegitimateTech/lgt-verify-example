@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "build": "npm run minify-js-sdk && npm run minify-landing-page",
+    "minify-js-sdk": "minify html/verify-sdk-v1.js > build/verify-sdk-v1.min.js",
+    "minify-landing-page": "minify html/index.html > build/index.html"
+  },
   "dependencies": {
     "minify": "^14.0.0"
   }
