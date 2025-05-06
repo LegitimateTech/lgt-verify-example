@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Script Test</title>
+  <!-- Script Snippet -->
+  <script>
+    (function() {
+      // Inject CSS to hide body and error container
+      const style = document.createElement('style');
+      style.innerHTML = `
+        body { display: none !important; }
+      `;
+      document.head.appendChild(style);
+
+      const API_URL = 'https://api.legitimate.tech/external/v1/tags/verify'; // or 'https://httpstat.us/400'
+
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM loaded, making API request');
+        fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(Object.fromEntries(new URLSearchParams(window.location.search)))
+        }).then(async res => {
+          if (!res.ok) throw new Error('Invalid response');
+          console.log(res);
+          const data = await res.json();
+          if (data.valid) {
+            style.innerHTML = `
+              body { display: block !important; }
+              #legitimate-custom-error-message { display: none !important; }
+            `;
+          } else {
+            renderErrorMessage();
+          }
+        })
+        .catch((e) => {
+          console.log('Error fetching API');
+          console.log(e);
+          renderErrorMessage();
+        });
+      });
+
+      function renderErrorMessage() {
+        let errorContainer = document.getElementById('legitimate-error-message-container');
+        if (!errorContainer) {
+          console.log('Creating error message container');
+          errorContainer = document.createElement('div');
+          errorContainer.id = 'legitimate-error-message-container';
+          document.body.appendChild(errorContainer);
+        }
+
+        let errorContent = `
+          <div style="font-family: sans-serif; color: red; padding: 2rem; text-align: center;">
+            An error occurred. Please try again later.
+          </div>
+        `;
+
+        const customErrorEl = document.getElementById('legitimate-custom-error-message');
+        if (customErrorEl) {
+          console.log('Using custom error message');
+          errorContent = customErrorEl.innerHTML;
+        }
+
+        errorContainer.innerHTML = errorContent;
+        style.innerHTML = `
+          body { display: block !important; }
+          body > *:not(#legitimate-error-message-container) { display: none !important; }
+        `;
+      }
+    })();
+  </script>
+</head>
+
+<body>
+  <h1>Main Page Content</h1>
+  <p>If the API is valid, you'll see this content.</p>
+
+  <!-- Custom Error Message -->
+  <div id="legitimate-custom-error-message">
+    <h1 style="color: darkred;">Custom Error!</h1>
+    <p>This content failed to load. Please contact support.</p>
+  </div>
+
+</body>
+</html>
