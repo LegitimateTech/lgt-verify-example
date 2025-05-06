@@ -13,7 +13,7 @@
       `;
       document.head.appendChild(style);
 
-      const API_URL = 'https://api.legitimate.tech/external/v1/tags/verify'; // or 'https://httpstat.us/400'
+      const API_URL = 'https://api.legitimate.tech/external/v1/tags/verify';
 
       document.addEventListener('DOMContentLoaded', () => {
         console.log('DOM loaded, making API request');
@@ -24,26 +24,33 @@
           },
           body: JSON.stringify(Object.fromEntries(new URLSearchParams(window.location.search)))
         }).then(async res => {
-          if (!res.ok) throw new Error('Invalid response');
           console.log(res);
           const data = await res.json();
+          console.log(data);
+          if (!res.ok) {
+            if (res.status === 422 && data.errors.cmac.indexOf('has expired') !== -1) {
+              renderErrorMessage('expired_cmac');
+            } else {
+              renderErrorMessage();
+            }
+            return;
+          }
           if (!data.errors) {
             style.innerHTML = `
               body { display: block !important; }
               #legitimate-custom-error-message { display: none !important; }
+              #legitimate-expired-cmac-message { display: none !important; }
             `;
           } else {
             renderErrorMessage();
           }
         })
-        .catch((e) => {
-          console.log('Error fetching API');
-          console.log(e);
+        .catch(() => {
           renderErrorMessage();
         });
       });
 
-      function renderErrorMessage() {
+      function renderErrorMessage(errorType = 'default') {
         let errorContainer = document.getElementById('legitimate-error-message-container');
         if (!errorContainer) {
           console.log('Creating error message container');
@@ -58,10 +65,18 @@
           </div>
         `;
 
-        const customErrorEl = document.getElementById('legitimate-custom-error-message');
-        if (customErrorEl) {
-          console.log('Using custom error message');
-          errorContent = customErrorEl.innerHTML;
+        if (errorType === 'expired_cmac') {
+          const expiredCmacErrorEl = document.getElementById('legitimate-expired-cmac-message');
+          if (expiredCmacErrorEl) {
+            console.log('Using expired cmac error message');
+            errorContent = expiredCmacErrorEl.innerHTML;
+          }
+        } else {
+          const customErrorEl = document.getElementById('legitimate-custom-error-message');
+          if (customErrorEl) {
+            console.log('Using custom error message');
+            errorContent = customErrorEl.innerHTML;
+          }
         }
 
         errorContainer.innerHTML = errorContent;
@@ -82,6 +97,12 @@
   <div id="legitimate-custom-error-message">
     <h1 style="color: darkred;">Custom Error!</h1>
     <p>This content failed to load. Please contact support.</p>
+  </div>
+
+  <!-- Expired CMAC Error Message -->
+  <div id="legitimate-expired-cmac-message">
+    <h1 style="color: darkred;">Please Scan the Tag Again</h1>
+    <p>The tag verification has expired. Please scan the tag again.</p>
   </div>
 
 </body>
