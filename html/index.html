@@ -27,7 +27,7 @@
           if (!res.ok) throw new Error('Invalid response');
           console.log(res);
           const data = await res.json();
-          if (data.valid) {
+          if (!data.errors) {
             style.innerHTML = `
               body { display: block !important; }
               #legitimate-custom-error-message { display: none !important; }
