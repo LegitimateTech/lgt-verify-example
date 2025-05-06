@@ -4,22 +4,33 @@
   <meta charset="UTF-8">
   <title>Script Test</title>
   <script src="verify-sdk-v1.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-  <h1>Main Page Content</h1>
-  <p>If the API is valid, you'll see this content.</p>
+<body class="min-h-screen bg-gray-50">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold text-gray-900 mb-4">Main Page Content</h1>
+    <p class="text-lg text-gray-600">If the API is valid, you'll see this content.</p>
+  </main>
 
   <!-- Custom Error Message -->
-  <div id="legitimate-custom-error-message">
-    <h1 style="color: darkred;">Custom Error!</h1>
-    <p>This content failed to load. Please contact support.</p>
+  <div id="legitimate-custom-error-message" class="hidden">
+    <div class="min-h-screen flex items-center justify-center bg-gray-50">
+      <div class="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-red-600 mb-4">Custom Error!</h1>
+        <p class="text-gray-600">This content failed to load. Please contact support.</p>
+      </div>
+    </div>
   </div>
 
   <!-- Expired CMAC Error Message -->
-  <div id="legitimate-expired-cmac-message">
-    <h1 style="color: darkred;">Please Scan the Tag Again</h1>
-    <p>The tag verification has expired. Please scan the tag again.</p>
+  <div id="legitimate-expired-cmac-message" class="hidden">
+    <div class="min-h-screen flex items-center justify-center bg-gray-50">
+      <div class="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-red-600 mb-4">Please Scan the Tag Again</h1>
+        <p class="text-gray-600">The tag verification has expired. Please scan the tag again.</p>
+      </div>
+    </div>
   </div>
 
 </body>
