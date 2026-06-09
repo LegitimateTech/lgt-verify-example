@@ -6,7 +6,7 @@
   `;
   document.head.appendChild(style);
 
-  const API_URL = 'https://api.legitimate.tech/external/v1/tags/verify';
+  const API_URL = 'https://0232-2405-6580-2460-1800-c06f-c00f-6d4d-b4bd.ngrok-free.app/external/v1/tags/verify';
 
   document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, making API request');
