@@ -6,7 +6,7 @@
   `;
   document.head.appendChild(style);
 
-  const API_URL = 'https://api.legitimate.tech/external/v1/tags/verify';
+  const API_URL = 'https://lgt-server-v2.onrender.com/external/v1/tags/verify';
 
   document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, making API request');
