@@ -5,6 +5,6 @@
     "minify-landing-page": "minify html/index.html > build/index.html"
   },
   "dependencies": {
-    "minify": "^14.0.0"
+    "minify": "^15.3.1"
   }
 }
